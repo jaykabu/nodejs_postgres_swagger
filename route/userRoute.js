@@ -57,7 +57,6 @@ const {User} = require('../models');
 
 /**
  * @swagger
- * path:
  *  /user:
  *    get:
  *      summary: Lists of the all user
@@ -65,10 +64,6 @@ const {User} = require('../models');
  *      responses:
  *        "200":
  *          description: The lists of user
- *          content:
- *            application/json
- *          schema:
- *            $ref: '#/components/schemas/User'
  */
 router.get('/', async (req, res) => {
     try {
@@ -95,7 +90,21 @@ router.get('/', async (req, res) => {
     }
 })
 
-
+/**
+ * @swagger
+ * /user:
+ *  post:
+ *    summary: Add a new user
+ *    tags: [Users]
+ *    requestBody:
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: "#/components/schemas/User"
+ *    responses:
+ *      '200':
+ *        description: ok
+ */
 router.post('/', async (req, res) => {
     try {
         const {name, email, password, age, address, phone} = req.body;
@@ -112,6 +121,24 @@ router.post('/', async (req, res) => {
     }
 });
 
+
+/**
+ * @swagger
+ *  /user/{userId}:
+ *    get:
+ *      summary: Get a user by ID
+ *      tags: [Users]
+ *      parameters:
+ *        - in: path
+ *          name: userId
+ *      responses:
+ *        '200':
+ *          description: A single user.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/User'
+ */
 router.get('/:userId', async (req, res) => {
     try {
         const uuid = req.params.userId;
@@ -132,6 +159,25 @@ router.get('/:userId', async (req, res) => {
     }
 });
 
+
+/**
+ * @swagger
+ * /user/{userId}:
+ *  patch:
+ *    summary: Add a new user
+ *    tags: [Users]
+ *    parameters:
+ *      - in: path
+ *        name: userId
+ *    requestBody:
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: "#/components/schemas/User"
+ *    responses:
+ *      '200':
+ *        description: updated user successfully.
+ */
 router.patch('/:userId', async (req, res) => {
     try {
         const uuid = req.params.userId;
@@ -149,6 +195,20 @@ router.patch('/:userId', async (req, res) => {
     }
 });
 
+
+/**
+ * @swagger
+ *  /user/{userId}:
+ *    delete:
+ *      summary: Delete a user by ID
+ *      tags: [Users]
+ *      parameters:
+ *        - in: path
+ *          name: userId
+ *      responses:
+ *        '200':
+ *          description: Delete user successfully.
+ */
 router.delete('/:userId', async (req, res) => {
     try {
         const uuid = req.params.userId;
