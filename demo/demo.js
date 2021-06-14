@@ -2,67 +2,151 @@
  * @swagger
  * components:
  *   schemas:
- *     User:
+ *     Teacher:
  *       type: object
  *       required:
  *         - name
  *         - email
  *         - password
- *         - age
- *         - address
- *         - phone
+ *         - birthday
+ *         - status
  *       properties:
  *         id:
- *           type: string
- *           description: The auto-generated id of the user
+ *           type: integer
+ *           description: The auto-generated id of the teacher.
  *         name:
  *           type: string
- *           description: The user name
+ *           description: The teacher name
  *         email:
  *           type: string
- *           description: The user email
+ *           description: The teacher email
  *         password:
  *           type: string
- *           description: The user password
- *         age:
+ *           description: The teacher password
+ *         birthday:
+ *           type: date
+ *           description: The teacher birthday
+ *         status:
  *           type: string
- *           description: The user age
- *         address:
- *           type: string
- *           description: The user address
- *         phone:
- *           type: string
- *           description: The user phone number
+ *           description: The teacher address
  *       example:
- *         id: d5fE_asz
- *         name: The New Turing Omnibus
+ *         name: jay
  *         email: jay@gmail.com
  *         password: jay123#
- *         age: 23
- *         address: Alexander
- *         phone: 1234567890
+ *         birthday: 2000-02-17
+ *         status: active
  */
 
 /**
  * @swagger
  * tags:
- *   name: Users
- *   description: The user managing API
+ *   name: Teachers
+ *   description: The teacher managing API
  */
+
 
 /**
  * @swagger
- * /user:
+ * /teacher:
  *   get:
- *     summary: Returns the list of all the users
- *     tags: [Users]
+ *     summary: Returns the list of all the teachers
+ *     tags: [Teachers]
  *     responses:
  *       200:
- *         description: The list of the users
+ *         description: The list of the teacher
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/User'
+ *                 $ref: '#/components/schemas/Teacher'
+ */
+
+
+/**
+ * @swagger
+ * /teacher:
+ *  post:
+ *    summary: Add a new teacher
+ *    tags: [Teachers]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: "#/components/schemas/Teacher"
+ *    responses:
+ *      '200':
+ *        description: Created.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: "#/components/schemas/Teacher"
+ */
+
+
+/**
+ * @swagger
+ *  /teacher/{teacherId}:
+ *    get:
+ *      summary: Get a teacher by ID
+ *      tags: [Teachers]
+ *      parameters:
+ *        - in: path
+ *          name: teacherId
+ *      responses:
+ *        '200':
+ *          description: A single teacher.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/Teacher'
+ *        '404':
+ *           description: Teacher not found.
+ */
+
+
+/**
+ * @swagger
+ * /teacher/{teacherId}:
+ *  patch:
+ *    summary: Update a teacher data.
+ *    tags: [Teachers]
+ *    parameters:
+ *      - in: path
+ *        name: teacherId
+ *        schema:
+ *          type: integer
+ *        required: true
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: "#/components/schemas/Teacher"
+ *    responses:
+ *      '200':
+ *        description: updated teacher successfully.
+ *      '404':
+ *        description: Teacher not found.
+ */
+
+
+/**
+ * @swagger
+ *  /teacher/{teacherId}:
+ *    delete:
+ *      summary: Delete a teacher by ID
+ *      tags: [Teachers]
+ *      parameters:
+ *        - in: path
+ *          name: teacherId
+ *          schema:
+ *            type: integer
+ *          required: true
+ *      responses:
+ *        '200':
+ *          description: Delete teacher successfully.
+ *        '404':
+ *          description: Teacher not found.
  */

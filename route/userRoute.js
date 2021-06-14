@@ -97,6 +97,7 @@ router.get('/', async (req, res) => {
  *    summary: Add a new user
  *    tags: [Users]
  *    requestBody:
+ *      required: true
  *      content:
  *        application/json:
  *          schema:

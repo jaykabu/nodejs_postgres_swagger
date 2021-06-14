@@ -8,6 +8,9 @@ const swaggerUi = require("swagger-ui-express");
 const {sequelize} = require('./models')
 const userRoute = require('./route/userRoute');
 
+//API
+const teacherRoute = require('./route/teacherRoute');
+
 const app = express();
 
 const swaggerOptions = {
@@ -27,7 +30,8 @@ const swaggerOptions = {
             title: "User API",
             description: "User API Information",
             contact: {
-                name: "Amazing Developer"
+                name: "Jay kabutarwala",
+                email: 'jaykabutarwala2@gmail.com'
             },
             servers: ["http://localhost:3000"]
         }
@@ -36,12 +40,20 @@ const swaggerOptions = {
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs,{ explorer: true }));
+app.use("/api",
+    swaggerUi.serve,
+    swaggerUi.setup(
+        swaggerDocs,
+        // {explorer: true}
+    ));
 
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 
 app.use('/user', userRoute);
+
+//Api
+app.use('/teacher', teacherRoute);
 
 //cors error
 app.use((req, res, next) => {
