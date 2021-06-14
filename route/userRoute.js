@@ -1,7 +1,12 @@
 const express = require('express').Router;
-const router = express();
-
 const {User} = require('../models');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+const UserController = require('../controller/usercontroller');
+const checkAuth = require('../middleware/check-auth');
+
+const router = express();
 
 
 /**
@@ -61,34 +66,13 @@ const {User} = require('../models');
  *    get:
  *      summary: Lists of the all user
  *      tags: [Users]
+ *      security:
+ *        - bearerAuth: []
  *      responses:
  *        "200":
  *          description: The lists of user
  */
-router.get('/', async (req, res) => {
-    try {
-        const user = await User.findAll();
-        const response = {
-            count: user.length,
-            user: user.map(user => {
-                return {
-                    uuid: user.uuid,
-                    name: user.name,
-                    email: user.email,
-                    password: user.password,
-                    age: user.age,
-                    address: user.address,
-                    phone: user.phone,
-                }
-            })
-        }
-        res.status(200).json(response);
-    } catch (err) {
-        res.status(500).json({
-            error: err
-        });
-    }
-})
+router.get('/', checkAuth, UserController.get_all_user);
 
 /**
  * @swagger
@@ -106,21 +90,7 @@ router.get('/', async (req, res) => {
  *      '200':
  *        description: ok
  */
-router.post('/', async (req, res) => {
-    try {
-        const {name, email, password, age, address, phone} = req.body;
-        const user = await User.create({name, email, password, age, address, phone})
-        res.status(201).json({
-            message: 'User created',
-            user: user
-        });
-    } catch (err) {
-        res.status(500).json({
-            error: err
-            // error: err.errors[0].message,
-        });
-    }
-});
+router.post('/', UserController.create_users);
 
 
 /**
@@ -140,25 +110,7 @@ router.post('/', async (req, res) => {
  *              schema:
  *                $ref: '#/components/schemas/User'
  */
-router.get('/:userId', async (req, res) => {
-    try {
-        const uuid = req.params.userId;
-        const user = await User.findOne({where: {uuid}});
-        if (!user) {
-            res.status(404).json({
-                message: 'UserId not found!'
-            })
-        } else {
-            res.status(200).json({
-                user: user
-            });
-        }
-    } catch (err) {
-        res.status(500).json({
-            error: err
-        });
-    }
-});
+router.get('/:userId', UserController.get_user_byId);
 
 
 /**
@@ -179,22 +131,7 @@ router.get('/:userId', async (req, res) => {
  *      '200':
  *        description: updated user successfully.
  */
-router.patch('/:userId', async (req, res) => {
-    try {
-        const uuid = req.params.userId;
-        const {name, email, password, age, address, phone} = req.body;
-
-        const user = await User.update({name, email, password, age, address, phone}, {where: {uuid}});
-        res.status(200).json({
-            message: 'Updated user',
-            user
-        })
-    } catch (err) {
-        res.status(500).json({
-            error: err
-        });
-    }
-});
+router.patch('/:userId', UserController.update_user);
 
 
 /**
@@ -210,27 +147,46 @@ router.patch('/:userId', async (req, res) => {
  *        '200':
  *          description: Delete user successfully.
  */
-router.delete('/:userId', async (req, res) => {
-    try {
-        const uuid = req.params.userId;
-        const user = await User.destroy({where: {uuid}});
+router.delete('/:userId', UserController.delete_user);
 
-        if (!user) {
-            res.status(404).json({
-                message: 'user already deleted'
+
+
+router.post('/login', async (req, res) => {
+    try {
+        debugger
+        const {email, password} = req.body;
+
+        const user = await User.findOne({
+            where: {email}
+        });
+
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (isMatch) {
+            const token = await jwt.sign({
+                    email: user.email,
+                    userId: user.uuid
+                },
+                'secret',
+                {
+                    expiresIn: '1h'
+                },
+            );
+            res.status(200).json({
+                message: 'Login successfully.',
+                token: token
             })
         } else {
             res.status(200).json({
-                message: 'User deleted',
-                user
+                message: 'Email and Password wrong!'
             })
         }
     } catch (err) {
         res.status(500).json({
-            error: err
-        });
+            message: 'Email and Password wrong!'
+        })
     }
-})
+});
 
 
 module.exports = router;

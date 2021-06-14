@@ -10,6 +10,7 @@ const userRoute = require('./route/userRoute');
 
 //API
 const teacherRoute = require('./route/teacherRoute');
+const studentRoute = require('./route/studentRoute');
 
 const app = express();
 
@@ -54,6 +55,7 @@ app.use('/user', userRoute);
 
 //Api
 app.use('/teacher', teacherRoute);
+app.use('/student', studentRoute);
 
 //cors error
 app.use((req, res, next) => {

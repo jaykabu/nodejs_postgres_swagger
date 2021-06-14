@@ -78,7 +78,6 @@ exports.get_teacher_byId = async (req, res) => {
 
 exports.update_teacher = async (req, res) => {
     try {
-        debugger
         const id = req.params.teacherId;
         const {name, email, password, birthday, status} = req.body;
 
