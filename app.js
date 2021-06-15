@@ -12,6 +12,8 @@ const userRoute = require('./route/userRoute');
 const teacherRoute = require('./route/teacherRoute');
 const studentRoute = require('./route/studentRoute');
 const courseRoute = require('./route/courseRoute');
+const subjectRoute = require('./route/subjectRoute');
+const sectionRoute = require('./route/sectionRoute');
 
 const app = express();
 
@@ -58,6 +60,8 @@ app.use('/user', userRoute);
 app.use('/teacher', teacherRoute);
 app.use('/student', studentRoute);
 app.use('/course', courseRoute);
+app.use('/subject', subjectRoute);
+app.use('/section', sectionRoute)
 
 //cors error
 app.use((req, res, next) => {
