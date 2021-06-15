@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Registration.belongsTo(models.Student, {foreignKey: 'studentId'});
+      Registration.belongsTo(models.Section, {foreignKey: 'sectionId'})
     }
   };
   Registration.init({
