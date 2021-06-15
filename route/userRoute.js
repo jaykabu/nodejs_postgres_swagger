@@ -150,6 +150,50 @@ router.patch('/:userId', UserController.update_user);
 router.delete('/:userId', UserController.delete_user);
 
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Login:
+ *       type: object
+ *       required:
+ *         - email
+ *         - password
+ *       properties:
+ *         email:
+ *           type: string
+ *           description: The teacher email
+ *         password:
+ *           type: string
+ *           description: The teacher password
+ *       example:
+ *         email: jay@gmail.com
+ *         password: jay123#
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: Logins
+ *   description: The Admin login managing API
+ */
+
+/**
+ * @swagger
+ * /user/login:
+ *  post:
+ *    summary: login
+ *    tags: [Logins]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: "#/components/schemas/Login"
+ *    responses:
+ *      '200':
+ *        description: Login successfully.
+ */
 
 router.post('/login', async (req, res) => {
     try {
